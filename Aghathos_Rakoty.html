@@ -3,83 +3,113 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>مراجعة أسبوعية | أسئلة + نتائج</title>
+  <title>أيام وأيام</title>
   <style>
     :root{
       --bg:#0b1220; --card:#111a2e; --muted:#9fb0d0; --text:#eef3ff;
-      --accent:#7dd3fc; --good:#34d399; --warn:#fbbf24; --bad:#fb7185;
+      --accent:#7dd3fc; --good:#34d399; --warn:#fbbf24; --bad:#fb7185; --blue:#60a5fa;
       --border:rgba(255,255,255,.10);
       font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
     }
     body{margin:0;background:linear-gradient(180deg,#070b14, #0b1220);color:var(--text);}
     .wrap{max-width:1100px;margin:0 auto;padding:18px;}
-    .hero{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between;}
-    .title{font-size:22px;font-weight:800}
-    .sub{color:var(--muted);font-size:14px;margin-top:4px;line-height:1.6}
-    .pill{border:1px solid var(--border);padding:8px 12px;border-radius:999px;color:var(--muted);font-size:13px}
-    .grid{display:grid;grid-template-columns:1.3fr .7fr;gap:14px;margin-top:14px}
+    .hero{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;}
+    .title{font-size:26px;font-weight:900;letter-spacing:.2px}
+    .sub{color:#dbe7ff;font-size:14px;margin-top:8px;line-height:1.9;max-width:780px}
+    .pill{border:1px solid var(--border);padding:8px 12px;border-radius:999px;color:var(--muted);font-size:13px;white-space:nowrap}
+    .grid{display:grid;grid-template-columns:1.35fr .65fr;gap:14px;margin-top:14px}
     @media (max-width:980px){ .grid{grid-template-columns:1fr} }
     .card{background:rgba(17,26,46,.85);border:1px solid var(--border);border-radius:18px;padding:14px;box-shadow:0 10px 25px rgba(0,0,0,.25)}
     h3{margin:0 0 10px;font-size:16px}
     label{display:block;font-size:14px;margin:10px 0 6px;color:#dbe7ff}
     input[type="text"]{width:100%;background:#0a1020;border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:12px;font-size:14px;outline:none}
+    textarea{width:100%;min-height:82px;background:#0a1020;border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:12px;font-size:14px;outline:none;resize:vertical}
     .section{border:1px solid var(--border);border-radius:16px;padding:12px;margin:10px 0;background:rgba(10,16,32,.55)}
-    .secTitle{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:4px}
+    .secTitle{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:6px}
     .secTitle b{font-size:14px}
     .secHint{color:var(--muted);font-size:12px}
     .q{border-top:1px dashed rgba(255,255,255,.12);padding-top:10px;margin-top:10px}
     .q:first-child{border-top:none;padding-top:0;margin-top:0}
-    .qText{font-size:13.5px;line-height:1.6;color:#eef3ff}
+    .qText{font-size:13.5px;line-height:1.65;color:#eef3ff}
     .qRow{display:flex;gap:10px;align-items:center;margin-top:6px}
     .qRow input[type="range"]{width:100%}
-    .val{min-width:42px;text-align:left;font-weight:900;font-variant-numeric: tabular-nums}
+    .val{min-width:52px;text-align:left;font-weight:900;font-variant-numeric: tabular-nums}
     .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
     button{
       border:1px solid var(--border);
       background:#0a1020;color:var(--text);
-      padding:10px 12px;border-radius:12px;font-weight:800;cursor:pointer
+      padding:10px 12px;border-radius:12px;font-weight:900;cursor:pointer
     }
     button.primary{background:linear-gradient(90deg,#38bdf8,#22c55e);border:none;color:#041019}
+    button.secondary{background:rgba(125,211,252,.12)}
     button.danger{background:rgba(251,113,133,.12);border:1px solid rgba(251,113,133,.35)}
+    .tiny{font-size:12px;color:var(--muted);line-height:1.7}
     .resultBox{border-radius:16px;padding:12px;border:1px solid var(--border);background:rgba(10,16,32,.65)}
     .row{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
     .season{display:inline-flex;align-items:center;gap:8px;font-weight:900}
     .dot{width:10px;height:10px;border-radius:50%}
     .bar{height:8px;border-radius:999px;background:rgba(255,255,255,.10);overflow:hidden}
-    .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fb7185,#fbbf24,#34d399)}
-    .verse{margin-top:10px;line-height:1.8}
+    .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fb7185,#fbbf24,#34d399,#60a5fa)}
+    .verse{margin-top:10px;line-height:1.9;color:#eef3ff}
     .verseRef{color:var(--muted);font-size:13px;margin-top:4px}
-    .step{margin-top:10px;color:#dbe7ff;line-height:1.7}
+    .step{margin-top:10px;color:#dbe7ff;line-height:1.85}
     .mini{margin-top:10px;border-top:1px solid rgba(255,255,255,.12);padding-top:10px}
     .kpi{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:8px 0}
     .kpi b{font-size:13px}
-    .tiny{font-size:12px;color:var(--muted)}
-    table{width:100%;border-collapse:separate;border-spacing:0 8px}
-    th{font-size:12px;color:var(--muted);text-align:right;font-weight:700;padding:0 8px}
-    td{padding:10px 8px;background:rgba(10,16,32,.65);border:1px solid var(--border)}
-    td:first-child{border-radius:12px 0 0 12px}
-    td:last-child{border-radius:0 12px 12px 0}
+    .badge{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--border);padding:6px 10px;border-radius:999px;font-size:12px;color:#dbe7ff;background:rgba(255,255,255,.04)}
+    .modalOverlay{
+      position:fixed; inset:0; background:rgba(0,0,0,.65);
+      display:flex; align-items:center; justify-content:center;
+      padding:18px; z-index:50;
+    }
+    .modal{
+      width:min(860px, 100%);
+      border:1px solid var(--border);
+      background:rgba(17,26,46,.96);
+      border-radius:20px;
+      padding:16px;
+      box-shadow:0 20px 60px rgba(0,0,0,.5);
+    }
+    .modal h2{margin:0 0 8px;font-size:18px}
+    .modal p{margin:0;color:#dbe7ff;line-height:1.85}
+    .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
+    @media (max-width:720px){ .opts{grid-template-columns:1fr} }
+    .optBtn{
+      text-align:right; padding:12px; border-radius:16px;
+      border:1px solid var(--border); background:rgba(10,16,32,.55);
+      color:var(--text); cursor:pointer; font-weight:900;
+    }
+    .optBtn small{display:block;margin-top:6px;color:var(--muted);font-weight:600;line-height:1.6}
+    .modalFooter{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-top:12px}
   </style>
 </head>
 <body>
   <div class="wrap">
     <div class="hero">
       <div>
-        <div class="title">مراجعة أسبوعية | 5 أجزاء (أسئلة + نتائج)</div>
-        <div class="sub">اختبار سريع عملي للشباب: روحيات – عمل – دراسة – علاقات – خدمة. احفظه أسبوعيًا وشوف التقدّم.</div>
+        <div class="title">أيام وأيام</div>
+        <div class="sub">
+          «لأَنِّي عَرَفْتُ الأَفْكَارَ الَّتِي أَنَا مُفْتَكِرٌ بِهَا عَنْكُمْ، يَقُولُ الرَّبُّ، أَفْكَارَ سَلاَمٍ لاَ شَرٍّ، لِأُعْطِيَكُمْ آخِرَةً وَرَجَاءً.»
+          <br><span class="tiny">(إرميا، 29، 11)</span>
+        </div>
+        <div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge">0 = لا يحدث</span>
+          <span class="badge">5 = يحدث دائمًا</span>
+          <span class="badge">هدفنا: تقييم + خطوة واحدة للأمام</span>
+        </div>
       </div>
-      <div class="pill" id="weekPill">Week</div>
+      <div class="pill" id="weekPill">الأسبوع</div>
     </div>
 
     <div class="grid">
       <div class="card">
-        <h3>1) جاوب (1–5)</h3>
+        <h3>1) قيّم نفسك بصدق (0–5)</h3>
 
         <label>الاسم (اختياري)</label>
         <input id="name" type="text" placeholder="اكتب اسمك أو سيبه فاضي" />
 
         <label>خطوتي الواحدة للأسبوع الجاي (اختياري)</label>
-        <input id="stepInput" type="text" placeholder="مثال: 5 دقايق صلاة يوميًا + أتابع خدمة ثابتة" />
+        <input id="stepInput" type="text" placeholder="مثال: 5 دقايق صلاة يوميًا + أوقف مقارنة نفسي بالآخرين" />
 
         <div id="sections"></div>
 
@@ -88,17 +118,18 @@
           <button id="saveBtn">احفظ المراجعة الأسبوعية</button>
           <button id="exportBtn">تصدير CSV</button>
           <button class="danger" id="clearBtn">مسح كل البيانات</button>
+          <button class="secondary" id="openIntroBtn">فتح شاشة البداية</button>
         </div>
 
         <div class="tiny" style="margin-top:10px">
-          ⚠️ البيانات بتتحفظ على نفس الجهاز فقط (خصوصية أعلى).
+          ⚠️ البيانات بتتحفظ على نفس الجهاز فقط (خصوصية أعلى). لو فاتح نفس اللينك على جهاز تاني… مش هيشوف نفس التاريخ.
         </div>
       </div>
 
       <div class="card">
         <h3>2) نتيجتك + المتابعة</h3>
 
-        <div class="resultBox" id="resultBox">
+        <div class="resultBox">
           <div class="row">
             <div class="season">
               <span class="dot" id="seasonDot"></span>
@@ -122,6 +153,51 @@
     </div>
   </div>
 
+  <!-- Intro Modal -->
+  <div class="modalOverlay" id="introOverlay" style="display:none">
+    <div class="modal">
+      <h2>كيف تنتظر الأيام التي سوف تأتي؟</h2>
+      <p>
+        اختار إجابة واحدة كبداية. الهدف مش إدانة… الهدف إننا نتحرك للأمام.
+        <br><span class="tiny">بعد الاختيار، هتلاقي اقتراح عملي بسيط مرتبط بالمعنى اللي في الصفحات.</span>
+      </p>
+
+      <div class="opts">
+        <button class="optBtn" data-opt="babil">
+          1) أقعد عند "أنهار بابل" وأفضل أفكر في اللي فات
+          <small>حاسس إني واقف مكاني… وده بيأخرني.</small>
+        </button>
+
+        <button class="optBtn" data-opt="future">
+          2) أقلق من المستقبل وأفقد الرجاء
+          <small>خايف… ومش شايف طريق واضح قدامي.</small>
+        </button>
+
+        <button class="optBtn" data-opt="compare">
+          3) أستنى الآخرين/أقارن نفسي بالناس
+          <small>نظرة الآخر بتأخرني… والمقارنة بتكسرني.</small>
+        </button>
+
+        <button class="optBtn" data-opt="move">
+          4) أتحرك بخطوة صغيرة… وأثق إن الرب بيشتغل
+          <small>مش مستني الكمال… بس ماشي للأمام.</small>
+        </button>
+      </div>
+
+      <div class="resultBox" id="introResult" style="margin-top:12px;display:none">
+        <div class="verse" id="introText"></div>
+        <div class="step" id="introStep"></div>
+      </div>
+
+      <div class="modalFooter">
+        <div class="tiny">نصيحة: بعد الاختيار… املأ التقييم وخد "خطوة واحدة للأسبوع".</div>
+        <div class="btns" style="margin:0">
+          <button id="closeIntroBtn">إغلاق</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <script>
   const $ = (id) => document.getElementById(id);
 
@@ -135,61 +211,66 @@
   }
   function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
   function pctFromTotal(total){ return clamp((total/75)*100,0,100); }
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, (m)=>({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
+  }
 
+  // ----- Questions blueprint tied to the pages' ideas -----
   const blueprint = [
     {
       key:"spirit",
       title:"1- الحياة الروحية",
-      hint:"صلاة/كلمة/توبة",
+      hint:"لا تستسلم… ارجع للرب + رجاء",
       qs:[
-        "عندي وقت ثابت للصلاة/الخلوة خلال الأسبوع.",
-        "بقرأ كلمة ربنا بانتظام وبحاول أطبقها.",
-        "لما أقع في فتور/خطية… برجع بسرعة لربنا بتوبة وصراحة."
+        "لما أضعف روحيًا… برجع للرب بدل ما أستسلم للحزن أو اللوم.",
+        "عندي رجاء حقيقي إن ربنا لسه بيشتغل في حياتي حتى لو مش شايف بسرعة.",
+        "بصلي بثقة إن الأيام اللي جاية في إيد الرب."
       ]
     },
     {
       key:"work",
       title:"2- العمل",
-      hint:"أمانة/انضباط/اتزان",
+      hint:"لا تنتظر… تحرّك بخطوة",
       qs:[
-        "في الشغل أنا أمين ومنضبط (مواعيد/مسؤوليات).",
-        "بتعامل باحترام وضمير حتى لو مفيش حد بيراقبني.",
-        "بعرف أوازن بين الشغل وبيتي/خدمتي بدون ما “أحرق” نفسي."
+        "مش بستنى الظروف تتحسن علشان أبدأ أتحرك في شغلي.",
+        "بأخذ خطوات عملية بدل ما ألوم الناس/النظام/المدير.",
+        "بحاول أكون مؤثر في المكان مش متفرج أو محبط."
       ]
     },
     {
       key:"study",
       title:"3- الدراسة",
-      hint:"خطة/تطوير/قيام بعد سقوط",
+      hint:"انظر للمسيرة… مش لموقف واحد",
       qs:[
-        "عندي خطة واقعية للمذاكرة/التطوير وبلتزم بيها نسبيًا.",
-        "لما أتأخر أو أفشل… بتعلم وأقوم تاني بدل ما أيأس.",
-        "بشتغل على تحسين مهاراتي (كورسات/قراءة/تدريب)."
+        "لما أفشل أو أتأخر… ببص للصورة الكبيرة وبقوم تاني.",
+        "مصدق إن تعب النهارده له حصاد بكرة حتى لو النتائج بتتأخر.",
+        "بشتغل على تطوير نفسي (مذاكرة/كورسات/مهارات) بخطة واقعية."
       ]
     },
     {
       key:"rel",
       title:"4- العلاقات / الصداقة",
-      hint:"حدود/غفران/صحبة صالحة",
+      hint:"لا تقارن… ولا تستنى الآخرين",
       qs:[
-        "عندي صداقات صحية بتقربني من ربنا مش تبعدني.",
+        "مش بقارن نفسي بالناس حواليا ولا بخلي المقارنة تكسرني.",
         "بعرف أقول “لأ” لضغط غلط أو علاقة بتأذيني.",
-        "بحل الخلافات بمحبة وبعرف أسامح وأطلب مسامحة."
+        "بحاول أكون صديق أمين وبحل الخلافات بمحبة وبعرف أسامح."
       ]
     },
     {
       key:"serv",
       title:"5- الخدمة",
-      hint:"ثبات/محبة/زيت",
+      hint:"يكفي أن تكون الأيام مع الرب",
       qs:[
-        "بخدم بانتظام أو على الأقل بسعي لخدمة ثابتة.",
-        "بخدم بمحبة مش لمجرد واجب/منظر.",
-        "بتابع نفسي روحيًا علشان خدمتي ما تبقاش “من غير زيت”."
+        "خدمتي نابعة من علاقة حقيقية مع الرب مش مجرد نشاط.",
+        "حتى لو الأيام صعبة… وجودي مع الرب أهم من نجاحات ظاهرة.",
+        "بسعى للثبات في خدمة/دور واضح بدل التشتت."
       ]
     }
   ];
 
-  // render questions
   function renderSections(){
     const root = $("sections");
     root.innerHTML = blueprint.map(sec=>{
@@ -199,8 +280,8 @@
           <div class="q">
             <div class="qText">${t}</div>
             <div class="qRow">
-              <input id="${id}" type="range" min="1" max="5" value="3" />
-              <div class="val"><span id="v_${id}">3</span>/5</div>
+              <input id="${id}" type="range" min="0" max="5" value="0" />
+              <div class="val"><span id="v_${id}">0</span>/5</div>
             </div>
           </div>
         `;
@@ -229,58 +310,62 @@
     });
   }
 
-  // scoring
   function getScores(){
     const parts = {};
     blueprint.forEach(sec=>{
-      let sum = 0;
+      let sum = 0; // 0..15
       sec.qs.forEach((_,idx)=>{
-        sum += +$(`${sec.key}_${idx+1}`).value; // 1..5
+        sum += +$(`${sec.key}_${idx+1}`).value; // 0..5
       });
-      parts[sec.key] = sum; // 3..15
+      parts[sec.key] = sum; // 0..15
     });
-    const total = Object.values(parts).reduce((a,b)=>a+b,0); // 15..75
+    const total = Object.values(parts).reduce((a,b)=>a+b,0); // 0..75
     return {parts, total};
   }
 
+  // Seasons tied to the pages
   function seasonFromTotal(total, parts){
-    // total-based + "روحيات" guardrail
-    const spirit = parts.spirit; // 3..15
-    if (spirit <= 7 || total <= 30) return "جفاف";
-    if (total <= 50) return "ثبات";
-    if (total <= 65) return "نمو";
-    return "إرسال";
+    const spirit = parts.spirit; // 0..15
+    // Guardrail: very low spiritual score indicates "Babylon" even if others are okay
+    if (spirit <= 4 || total <= 20) return "عند أنهار بابل";
+    if (total <= 40) return "زمن الانتظار";
+    if (total <= 58) return "زمن التحرك";
+    return "أيام مع الرب";
   }
 
   function seasonContent(season){
     switch(season){
-      case "جفاف":
+      case "عند أنهار بابل":
         return {
           color: "var(--bad)",
-          verse: "«رُدَّ لِي بَهْجَةَ خَلاَصِكَ، وَبِرُوحٍ مُنْتَدِبَةٍ اعْضُدْنِي.»",
-          ref: "(مزمور، 51، 12)",
-          step: "خد خطوة واحدة: 7 أيام × 5 دقايق صلاة صادقة + مزمور واحد يوميًا."
+          verse: "رسالة الموسم: ما تقعدش طويلًا تبكي على اللي فات… الرب يقدر يبدأ معاك من جديد.",
+          ref: "مبدأ عملي: لا تجلس عند الألم — تحرّك بخطوة صغيرة.",
+          step: "خطوة واحدة للأسبوع: اختار عادة روحية بسيطة (5 دقايق صلاة يوميًا) + قرار عملي واحد (مكالمة/مصالحة/تنظيم يومك).",
+          quote: "لا تجلس على أنهار بابل وتبكي طويلًا… لكن تحرك."
         };
-      case "ثبات":
+      case "زمن الانتظار":
         return {
           color: "var(--warn)",
-          verse: "«اُثْبُتُوا فِيَّ وَأَنَا فِيكُمْ.»",
-          ref: "(يوحنا، 15، 4)",
-          step: "خد خطوة واحدة: ثبّت عادة روحية واحدة (وقت كلمة/اجتماع/خدمة) بدل ما تزود حاجات كتير."
+          verse: "رسالة الموسم: عندك رجاء… لكن محتاج تحدد خطوة واضحة بدل انتظار الظروف.",
+          ref: "مبدأ عملي: لا تيأس من المستقبل — الرب ما زال يعمل.",
+          step: "خطوة واحدة للأسبوع: اكتب هدف واحد واقعي + 3 خطوات صغيرة (يوميًا/أسبوعيًا) وابدأ فيهم فورًا.",
+          quote: "لا تيأس من المستقبل… لأن الله مازال ينتظرك."
         };
-      case "نمو":
+      case "زمن التحرك":
         return {
           color: "var(--good)",
-          verse: "«اَللهُ هُوَ الْعَامِلُ فِيكُمْ أَنْ تُرِيدُوا وَأَنْ تَعْمَلُوا مِنْ أَجْلِ الْمَسَرَّةِ.»",
-          ref: "(فيلبي، 2، 13)",
-          step: "خد خطوة واحدة: شارك شخص واحد بحاجة ربنا علّمك إياها، وابقَ سند روحي ليه."
+          verse: "رسالة الموسم: أنت بدأت تتحرك… المهم الثبات وعدم الرجوع للمقارنة أو التشتت.",
+          ref: "مبدأ عملي: انظر لمسيرتك — واثبت في عادات بسيطة.",
+          step: "خطوة واحدة للأسبوع: ثبّت عادة واحدة (وقت كلمة/مذاكرة/نظام نوم) + تابعها 7 أيام.",
+          quote: "انظر إلى مسيرتك… ليس لمواقف متقطعة."
         };
       default:
         return {
-          color: "var(--accent)",
-          verse: "«مَنْ أُرْسِلُ وَمَنْ يَذْهَبُ مِنْ أَجْلِنَا؟»",
-          ref: "(إشعياء، 6، 8)",
-          step: "خد خطوة واحدة: اطلب مسؤولية/خدمة محددة، وخطة متابعة بسيطة لمدة 4 أسابيع."
+          color: "var(--blue)",
+          verse: "رسالة الموسم: حتى لو الأيام متفاوتة… أنت واخد قرار إن الأيام كلها تبقى مع الرب.",
+          ref: "مبدأ عملي: حضور الرب هو السر — وهو يديك معنى وحيوية.",
+          step: "خطوة واحدة للأسبوع: خُد مسؤولية خدمة/متابعة شخص واحد + استمر في وقتك مع الرب.",
+          quote: "يكفي أن تكون جميع الأيام مع الرب."
         };
     }
   }
@@ -290,32 +375,30 @@
       spirit:"الحياة الروحية",
       work:"العمل",
       study:"الدراسة",
-      rel:"العلاقات",
+      rel:"العلاقات/الصداقة",
       serv:"الخدمة"
     })[key] || key;
   }
 
+  // Advice tied to the pages' points
   function partAdvice(key, score){
-    // score 3..15
-    if (score <= 7){
+    // score: 0..15
+    const low = score <= 5;
+    const mid = score <= 10;
+
+    if (low){
       switch(key){
-        case "spirit": return "ابدأ بأبسط عادة: 5 دقايق صلاة + إنجيل يوحنا 1 إصحاح على أسبوعين.";
-        case "work": return "اختار عادة واحدة: ميعاد ثابت + قائمة 3 أولويات يوميًا.";
-        case "study": return "ابدأ بـ 25 دقيقة يوميًا (Pomodoro) + هدف أسبوعي صغير.";
-        case "rel": return "اعمل حدود صحية: قلّل علاقة بتسحبك، وقرّب من صحبة تقودك لربنا.";
-        case "serv": return "اختار خدمة واحدة ثابتة شهر واحد بدل ما تشتت نفسك.";
+        case "spirit": return "ابدأ من النهارده: 5 دقايق صلاة صادقة + مزمور واحد قصير يوميًا. ما تستناش إحساس… ابدأ.";
+        case "work": return "اختار خطوة عملية: ميعاد ثابت + 3 أولويات يوميًا. ما تستناش الظروف.";
+        case "study": return "ابدأ صغير: 25 دقيقة يوميًا + هدف أسبوعي واحد. ما تبصّش على لحظة الفشل.";
+        case "rel": return "اقفل باب المقارنة وحدد حدود صحية: قلّل ضغط غلط، وقرّب من صحبة تقويك.";
+        case "serv": return "اختار خدمة واحدة ثابتة شهر واحد بدل التشتت. الثبات أهم من الكثرة.";
       }
     }
-    if (score <= 11){
-      return "مستوى كويس… ثبّت عادة واحدة واطلب متابعة/Accountability مع شخص أمين.";
+    if (mid){
+      return "كويس… بس محتاج تثبيت: خطوة واحدة واضحة + شخص تتابع معاه (Accountability) الأسبوع ده.";
     }
-    return "قوي جدًا… ساعد غيرك: علّم/تابع شخص واحد وكن قدوة ثابتة.";
-  }
-
-  function escapeHtml(str){
-    return String(str).replace(/[&<>"']/g, (m)=>({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
-    }[m]));
+    return "قوي جدًا… استخدمه: شجع/تابع شخص واحد، وخليك قدوة في الثبات بدل المقارنة.";
   }
 
   function renderResult(){
@@ -329,13 +412,13 @@
     $("totalText").textContent = total;
     $("totalBar").style.width = `${pctFromTotal(total)}%`;
 
-    $("verse").textContent = c.verse;
+    $("verse").innerHTML = `<b>${escapeHtml(c.verse)}</b><div class="tiny" style="margin-top:6px">${escapeHtml(c.quote)}</div>`;
     $("verseRef").textContent = c.ref;
 
     const customStep = $("stepInput").value.trim();
     $("nextStep").innerHTML = customStep
       ? `<b>خطوتي المكتوبة:</b> ${escapeHtml(customStep)}`
-      : `<b>اقتراح عملي:</b> ${c.step}`;
+      : `<b>اقتراح عملي:</b> ${escapeHtml(c.step)}`;
 
     const partsHtml = Object.entries(parts).map(([k,v])=>{
       const pct = clamp((v/15)*100,0,100);
@@ -355,8 +438,45 @@
     return {parts, total, season, step: customStep || c.step};
   }
 
-  // storage
-  const KEY = "weekly_review_q_v1";
+  // ---- Intro screen logic ----
+  const INTRO_KEY = "ayyam_intro_choice_v1";
+  function showIntro(choiceText, stepText){
+    $("introResult").style.display = "block";
+    $("introText").innerHTML = `<b>إجابتك:</b> ${escapeHtml(choiceText)}`;
+    $("introStep").innerHTML = `<b>اقتراح عملي (دقيقة واحدة):</b> ${escapeHtml(stepText)}`;
+  }
+
+  function introChoice(opt){
+    // tied to the pages' points
+    if (opt === "babil"){
+      localStorage.setItem(INTRO_KEY, "babil");
+      showIntro(
+        "أقعد عند أنهار بابل وأفضل أفكر في اللي فات",
+        "قرار صغير: مش هقف عند الألم. هعمل خطوة واحدة النهارده (صلاة 5 دقايق + ترتيب حاجة واحدة في حياتي)."
+      );
+    } else if (opt === "future"){
+      localStorage.setItem(INTRO_KEY, "future");
+      showIntro(
+        "أقلق من المستقبل وأفقد الرجاء",
+        "قرار صغير: هتمسك بالثقة في مشيئة الله. هكتب هدف أسبوعي واحد وأبدأ فيه من النهارده."
+      );
+    } else if (opt === "compare"){
+      localStorage.setItem(INTRO_KEY, "compare");
+      showIntro(
+        "أستنى الآخرين/أقارن نفسي بالناس",
+        "قرار صغير: هبطل مقارنة. هركز على دعوة ربنا ليا، وهعمل خطوة واحدة في مساري أنا."
+      );
+    } else {
+      localStorage.setItem(INTRO_KEY, "move");
+      showIntro(
+        "أتحرك بخطوة صغيرة… وأثق إن الرب بيشتغل",
+        "قرار صغير: هثبت عادة واحدة الأسبوع ده (كلمة/صلاة/نظام) وأتابعها 7 أيام."
+      );
+    }
+  }
+
+  // ---- storage / weekly history ----
+  const KEY = "ayyam_weekly_history_v1";
   function loadHistory(){ try{ return JSON.parse(localStorage.getItem(KEY) || "[]"); }catch{ return []; } }
   function saveHistory(items){ localStorage.setItem(KEY, JSON.stringify(items)); }
   function addEntry(entry){
@@ -373,21 +493,18 @@
     const rows = h.slice(0,8).map(e=>{
       const pct = clamp((e.total/75)*100,0,100);
       return `
-        <tr>
-          <td class="tiny">${escapeHtml(e.week)}</td>
-          <td class="tiny">${escapeHtml(e.season)}</td>
-          <td class="tiny">${e.total}/75</td>
-          <td style="min-width:140px"><div class="bar"><i style="width:${pct}%"></i></div></td>
-        </tr>
+        <div class="resultBox" style="margin-bottom:10px">
+          <div class="row">
+            <div class="tiny"><b>${escapeHtml(e.week)}</b></div>
+            <div class="tiny">${escapeHtml(e.season)}</div>
+            <div class="tiny"><b>${e.total}</b>/75</div>
+          </div>
+          <div class="bar" style="margin-top:10px"><i style="width:${pct}%"></i></div>
+          ${e.step ? `<div class="tiny" style="margin-top:10px"><b>خطوتي:</b> ${escapeHtml(e.step)}</div>` : ``}
+        </div>
       `;
     }).join("");
-    $("historyWrap").innerHTML = `
-      <table>
-        <thead><tr><th>الأسبوع</th><th>الموسم</th><th>المجموع</th><th>تقدّم</th></tr></thead>
-        <tbody>${rows}</tbody>
-      </table>
-      <div class="tiny">* التاريخ ده على نفس الجهاز اللي اتحفظت عليه المراجعات.</div>
-    `;
+    $("historyWrap").innerHTML = rows;
   }
 
   function exportCSV(){
@@ -400,7 +517,7 @@
     const blob = new Blob([lines.join("\n")], {type:"text/csv;charset=utf-8"});
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
-    a.href = url; a.download = "weekly_review.csv";
+    a.href = url; a.download = "ayyam_wa_ayyam_weekly_review.csv";
     document.body.appendChild(a); a.click(); a.remove();
     URL.revokeObjectURL(url);
   }
@@ -412,13 +529,14 @@
     alert("تم المسح.");
   }
 
-  // init
+  // ---- wire up ----
   $("weekPill").textContent = `الأسبوع: ${isoWeekString()}`;
   renderSections();
   bindAllSliders();
   renderHistory();
 
   $("calcBtn").addEventListener("click", renderResult);
+
   $("saveBtn").addEventListener("click", ()=>{
     const r = renderResult();
     const entry = {
@@ -434,8 +552,28 @@
     renderHistory();
     alert("اتحفظت ✅");
   });
+
   $("exportBtn").addEventListener("click", exportCSV);
   $("clearBtn").addEventListener("click", clearAll);
+
+  // Intro modal handlers
+  $("openIntroBtn").addEventListener("click", ()=>{
+    $("introOverlay").style.display = "flex";
+    $("introResult").style.display = "none";
+  });
+  $("closeIntroBtn").addEventListener("click", ()=>{
+    $("introOverlay").style.display = "none";
+  });
+  document.querySelectorAll(".optBtn").forEach(btn=>{
+    btn.addEventListener("click", ()=> introChoice(btn.dataset.opt));
+  });
+
+  // Optional: open intro on first visit
+  const seen = localStorage.getItem("ayyam_seen_intro_v1");
+  if(!seen){
+    $("introOverlay").style.display = "flex";
+    localStorage.setItem("ayyam_seen_intro_v1","1");
+  }
 </script>
 </body>
 </html>
