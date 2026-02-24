@@ -11,6 +11,27 @@
       --border:rgba(255,255,255,.10);
       font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
     }
+    @media (prefers-color-scheme: light) {
+    :root{
+      --bg:#f7f9fc;
+      --card:#ffffff;
+      --text:#0f172a;
+      --muted:#475569;
+      --border:rgba(0,0,0,.08);
+    }
+  
+    body{
+      background:linear-gradient(180deg,#eef2f7,#f7f9fc);
+    }
+  
+    .card{
+      box-shadow:0 6px 18px rgba(0,0,0,.08);
+    }
+  
+    .bar{
+      background:rgba(0,0,0,.08);
+    }
+  }
     body{margin:0;background:linear-gradient(180deg,#070b14, #0b1220);color:var(--text);}
     .wrap{max-width:1120px;margin:0 auto;padding:18px;}
     .hero{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;}
@@ -602,5 +623,6 @@
 </script>
 </body>
 </html>
+
 
 
