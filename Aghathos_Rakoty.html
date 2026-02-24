@@ -1,0 +1,441 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>مراجعة أسبوعية | أسئلة + نتائج</title>
+  <style>
+    :root{
+      --bg:#0b1220; --card:#111a2e; --muted:#9fb0d0; --text:#eef3ff;
+      --accent:#7dd3fc; --good:#34d399; --warn:#fbbf24; --bad:#fb7185;
+      --border:rgba(255,255,255,.10);
+      font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
+    }
+    body{margin:0;background:linear-gradient(180deg,#070b14, #0b1220);color:var(--text);}
+    .wrap{max-width:1100px;margin:0 auto;padding:18px;}
+    .hero{display:flex;gap:14px;flex-wrap:wrap;align-items:center;justify-content:space-between;}
+    .title{font-size:22px;font-weight:800}
+    .sub{color:var(--muted);font-size:14px;margin-top:4px;line-height:1.6}
+    .pill{border:1px solid var(--border);padding:8px 12px;border-radius:999px;color:var(--muted);font-size:13px}
+    .grid{display:grid;grid-template-columns:1.3fr .7fr;gap:14px;margin-top:14px}
+    @media (max-width:980px){ .grid{grid-template-columns:1fr} }
+    .card{background:rgba(17,26,46,.85);border:1px solid var(--border);border-radius:18px;padding:14px;box-shadow:0 10px 25px rgba(0,0,0,.25)}
+    h3{margin:0 0 10px;font-size:16px}
+    label{display:block;font-size:14px;margin:10px 0 6px;color:#dbe7ff}
+    input[type="text"]{width:100%;background:#0a1020;border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:12px;font-size:14px;outline:none}
+    .section{border:1px solid var(--border);border-radius:16px;padding:12px;margin:10px 0;background:rgba(10,16,32,.55)}
+    .secTitle{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:4px}
+    .secTitle b{font-size:14px}
+    .secHint{color:var(--muted);font-size:12px}
+    .q{border-top:1px dashed rgba(255,255,255,.12);padding-top:10px;margin-top:10px}
+    .q:first-child{border-top:none;padding-top:0;margin-top:0}
+    .qText{font-size:13.5px;line-height:1.6;color:#eef3ff}
+    .qRow{display:flex;gap:10px;align-items:center;margin-top:6px}
+    .qRow input[type="range"]{width:100%}
+    .val{min-width:42px;text-align:left;font-weight:900;font-variant-numeric: tabular-nums}
+    .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    button{
+      border:1px solid var(--border);
+      background:#0a1020;color:var(--text);
+      padding:10px 12px;border-radius:12px;font-weight:800;cursor:pointer
+    }
+    button.primary{background:linear-gradient(90deg,#38bdf8,#22c55e);border:none;color:#041019}
+    button.danger{background:rgba(251,113,133,.12);border:1px solid rgba(251,113,133,.35)}
+    .resultBox{border-radius:16px;padding:12px;border:1px solid var(--border);background:rgba(10,16,32,.65)}
+    .row{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap}
+    .season{display:inline-flex;align-items:center;gap:8px;font-weight:900}
+    .dot{width:10px;height:10px;border-radius:50%}
+    .bar{height:8px;border-radius:999px;background:rgba(255,255,255,.10);overflow:hidden}
+    .bar > i{display:block;height:100%;width:0;background:linear-gradient(90deg,#fb7185,#fbbf24,#34d399)}
+    .verse{margin-top:10px;line-height:1.8}
+    .verseRef{color:var(--muted);font-size:13px;margin-top:4px}
+    .step{margin-top:10px;color:#dbe7ff;line-height:1.7}
+    .mini{margin-top:10px;border-top:1px solid rgba(255,255,255,.12);padding-top:10px}
+    .kpi{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:8px 0}
+    .kpi b{font-size:13px}
+    .tiny{font-size:12px;color:var(--muted)}
+    table{width:100%;border-collapse:separate;border-spacing:0 8px}
+    th{font-size:12px;color:var(--muted);text-align:right;font-weight:700;padding:0 8px}
+    td{padding:10px 8px;background:rgba(10,16,32,.65);border:1px solid var(--border)}
+    td:first-child{border-radius:12px 0 0 12px}
+    td:last-child{border-radius:0 12px 12px 0}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <div class="title">مراجعة أسبوعية | 5 أجزاء (أسئلة + نتائج)</div>
+        <div class="sub">اختبار سريع عملي للشباب: روحيات – عمل – دراسة – علاقات – خدمة. احفظه أسبوعيًا وشوف التقدّم.</div>
+      </div>
+      <div class="pill" id="weekPill">Week</div>
+    </div>
+
+    <div class="grid">
+      <div class="card">
+        <h3>1) جاوب (1–5)</h3>
+
+        <label>الاسم (اختياري)</label>
+        <input id="name" type="text" placeholder="اكتب اسمك أو سيبه فاضي" />
+
+        <label>خطوتي الواحدة للأسبوع الجاي (اختياري)</label>
+        <input id="stepInput" type="text" placeholder="مثال: 5 دقايق صلاة يوميًا + أتابع خدمة ثابتة" />
+
+        <div id="sections"></div>
+
+        <div class="btns">
+          <button class="primary" id="calcBtn">اظهر النتيجة</button>
+          <button id="saveBtn">احفظ المراجعة الأسبوعية</button>
+          <button id="exportBtn">تصدير CSV</button>
+          <button class="danger" id="clearBtn">مسح كل البيانات</button>
+        </div>
+
+        <div class="tiny" style="margin-top:10px">
+          ⚠️ البيانات بتتحفظ على نفس الجهاز فقط (خصوصية أعلى).
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>2) نتيجتك + المتابعة</h3>
+
+        <div class="resultBox" id="resultBox">
+          <div class="row">
+            <div class="season">
+              <span class="dot" id="seasonDot"></span>
+              <span id="seasonText">اضغط "اظهر النتيجة"</span>
+            </div>
+            <div class="tiny">النتيجة العامة: <b id="totalText">-</b>/75</div>
+          </div>
+
+          <div class="bar" style="margin-top:10px"><i id="totalBar"></i></div>
+
+          <div class="verse" id="verse"></div>
+          <div class="verseRef" id="verseRef"></div>
+          <div class="step" id="nextStep"></div>
+
+          <div class="mini" id="partsBox"></div>
+        </div>
+
+        <div style="margin-top:12px" class="tiny">آخر المراجعات (على نفس الجهاز):</div>
+        <div id="historyWrap" style="margin-top:8px"></div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const $ = (id) => document.getElementById(id);
+
+  function isoWeekString(d=new Date()){
+    const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+    const dayNum = date.getUTCDay() || 7;
+    date.setUTCDate(date.getUTCDate() + 4 - dayNum);
+    const yearStart = new Date(Date.UTC(date.getUTCFullYear(),0,1));
+    const weekNo = Math.ceil((((date - yearStart) / 86400000) + 1)/7);
+    return `${date.getUTCFullYear()}-W${String(weekNo).padStart(2,'0')}`;
+  }
+  function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
+  function pctFromTotal(total){ return clamp((total/75)*100,0,100); }
+
+  const blueprint = [
+    {
+      key:"spirit",
+      title:"1- الحياة الروحية",
+      hint:"صلاة/كلمة/توبة",
+      qs:[
+        "عندي وقت ثابت للصلاة/الخلوة خلال الأسبوع.",
+        "بقرأ كلمة ربنا بانتظام وبحاول أطبقها.",
+        "لما أقع في فتور/خطية… برجع بسرعة لربنا بتوبة وصراحة."
+      ]
+    },
+    {
+      key:"work",
+      title:"2- العمل",
+      hint:"أمانة/انضباط/اتزان",
+      qs:[
+        "في الشغل أنا أمين ومنضبط (مواعيد/مسؤوليات).",
+        "بتعامل باحترام وضمير حتى لو مفيش حد بيراقبني.",
+        "بعرف أوازن بين الشغل وبيتي/خدمتي بدون ما “أحرق” نفسي."
+      ]
+    },
+    {
+      key:"study",
+      title:"3- الدراسة",
+      hint:"خطة/تطوير/قيام بعد سقوط",
+      qs:[
+        "عندي خطة واقعية للمذاكرة/التطوير وبلتزم بيها نسبيًا.",
+        "لما أتأخر أو أفشل… بتعلم وأقوم تاني بدل ما أيأس.",
+        "بشتغل على تحسين مهاراتي (كورسات/قراءة/تدريب)."
+      ]
+    },
+    {
+      key:"rel",
+      title:"4- العلاقات / الصداقة",
+      hint:"حدود/غفران/صحبة صالحة",
+      qs:[
+        "عندي صداقات صحية بتقربني من ربنا مش تبعدني.",
+        "بعرف أقول “لأ” لضغط غلط أو علاقة بتأذيني.",
+        "بحل الخلافات بمحبة وبعرف أسامح وأطلب مسامحة."
+      ]
+    },
+    {
+      key:"serv",
+      title:"5- الخدمة",
+      hint:"ثبات/محبة/زيت",
+      qs:[
+        "بخدم بانتظام أو على الأقل بسعي لخدمة ثابتة.",
+        "بخدم بمحبة مش لمجرد واجب/منظر.",
+        "بتابع نفسي روحيًا علشان خدمتي ما تبقاش “من غير زيت”."
+      ]
+    }
+  ];
+
+  // render questions
+  function renderSections(){
+    const root = $("sections");
+    root.innerHTML = blueprint.map(sec=>{
+      const qsHtml = sec.qs.map((t,idx)=>{
+        const id = `${sec.key}_${idx+1}`;
+        return `
+          <div class="q">
+            <div class="qText">${t}</div>
+            <div class="qRow">
+              <input id="${id}" type="range" min="1" max="5" value="3" />
+              <div class="val"><span id="v_${id}">3</span>/5</div>
+            </div>
+          </div>
+        `;
+      }).join("");
+      return `
+        <div class="section">
+          <div class="secTitle">
+            <b>${sec.title}</b>
+            <span class="secHint">${sec.hint}</span>
+          </div>
+          ${qsHtml}
+        </div>
+      `;
+    }).join("");
+  }
+
+  function bindAllSliders(){
+    blueprint.forEach(sec=>{
+      sec.qs.forEach((_,idx)=>{
+        const id = `${sec.key}_${idx+1}`;
+        const s = $(id), o = $(`v_${id}`);
+        const sync = ()=> o.textContent = s.value;
+        s.addEventListener("input", sync);
+        sync();
+      });
+    });
+  }
+
+  // scoring
+  function getScores(){
+    const parts = {};
+    blueprint.forEach(sec=>{
+      let sum = 0;
+      sec.qs.forEach((_,idx)=>{
+        sum += +$(`${sec.key}_${idx+1}`).value; // 1..5
+      });
+      parts[sec.key] = sum; // 3..15
+    });
+    const total = Object.values(parts).reduce((a,b)=>a+b,0); // 15..75
+    return {parts, total};
+  }
+
+  function seasonFromTotal(total, parts){
+    // total-based + "روحيات" guardrail
+    const spirit = parts.spirit; // 3..15
+    if (spirit <= 7 || total <= 30) return "جفاف";
+    if (total <= 50) return "ثبات";
+    if (total <= 65) return "نمو";
+    return "إرسال";
+  }
+
+  function seasonContent(season){
+    switch(season){
+      case "جفاف":
+        return {
+          color: "var(--bad)",
+          verse: "«رُدَّ لِي بَهْجَةَ خَلاَصِكَ، وَبِرُوحٍ مُنْتَدِبَةٍ اعْضُدْنِي.»",
+          ref: "(مزمور، 51، 12)",
+          step: "خد خطوة واحدة: 7 أيام × 5 دقايق صلاة صادقة + مزمور واحد يوميًا."
+        };
+      case "ثبات":
+        return {
+          color: "var(--warn)",
+          verse: "«اُثْبُتُوا فِيَّ وَأَنَا فِيكُمْ.»",
+          ref: "(يوحنا، 15، 4)",
+          step: "خد خطوة واحدة: ثبّت عادة روحية واحدة (وقت كلمة/اجتماع/خدمة) بدل ما تزود حاجات كتير."
+        };
+      case "نمو":
+        return {
+          color: "var(--good)",
+          verse: "«اَللهُ هُوَ الْعَامِلُ فِيكُمْ أَنْ تُرِيدُوا وَأَنْ تَعْمَلُوا مِنْ أَجْلِ الْمَسَرَّةِ.»",
+          ref: "(فيلبي، 2، 13)",
+          step: "خد خطوة واحدة: شارك شخص واحد بحاجة ربنا علّمك إياها، وابقَ سند روحي ليه."
+        };
+      default:
+        return {
+          color: "var(--accent)",
+          verse: "«مَنْ أُرْسِلُ وَمَنْ يَذْهَبُ مِنْ أَجْلِنَا؟»",
+          ref: "(إشعياء، 6، 8)",
+          step: "خد خطوة واحدة: اطلب مسؤولية/خدمة محددة، وخطة متابعة بسيطة لمدة 4 أسابيع."
+        };
+    }
+  }
+
+  function partLabel(key){
+    return ({
+      spirit:"الحياة الروحية",
+      work:"العمل",
+      study:"الدراسة",
+      rel:"العلاقات",
+      serv:"الخدمة"
+    })[key] || key;
+  }
+
+  function partAdvice(key, score){
+    // score 3..15
+    if (score <= 7){
+      switch(key){
+        case "spirit": return "ابدأ بأبسط عادة: 5 دقايق صلاة + إنجيل يوحنا 1 إصحاح على أسبوعين.";
+        case "work": return "اختار عادة واحدة: ميعاد ثابت + قائمة 3 أولويات يوميًا.";
+        case "study": return "ابدأ بـ 25 دقيقة يوميًا (Pomodoro) + هدف أسبوعي صغير.";
+        case "rel": return "اعمل حدود صحية: قلّل علاقة بتسحبك، وقرّب من صحبة تقودك لربنا.";
+        case "serv": return "اختار خدمة واحدة ثابتة شهر واحد بدل ما تشتت نفسك.";
+      }
+    }
+    if (score <= 11){
+      return "مستوى كويس… ثبّت عادة واحدة واطلب متابعة/Accountability مع شخص أمين.";
+    }
+    return "قوي جدًا… ساعد غيرك: علّم/تابع شخص واحد وكن قدوة ثابتة.";
+  }
+
+  function escapeHtml(str){
+    return String(str).replace(/[&<>"']/g, (m)=>({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[m]));
+  }
+
+  function renderResult(){
+    const {parts, total} = getScores();
+    const season = seasonFromTotal(total, parts);
+    const c = seasonContent(season);
+
+    $("seasonText").textContent = `موسمي الحالي: ${season}`;
+    $("seasonDot").style.background = c.color;
+
+    $("totalText").textContent = total;
+    $("totalBar").style.width = `${pctFromTotal(total)}%`;
+
+    $("verse").textContent = c.verse;
+    $("verseRef").textContent = c.ref;
+
+    const customStep = $("stepInput").value.trim();
+    $("nextStep").innerHTML = customStep
+      ? `<b>خطوتي المكتوبة:</b> ${escapeHtml(customStep)}`
+      : `<b>اقتراح عملي:</b> ${c.step}`;
+
+    const partsHtml = Object.entries(parts).map(([k,v])=>{
+      const pct = clamp((v/15)*100,0,100);
+      return `
+        <div class="kpi">
+          <b>${partLabel(k)}</b>
+          <span class="tiny"><b>${v}</b>/15</span>
+        </div>
+        <div class="bar"><i style="width:${pct}%"></i></div>
+        <div class="tiny" style="margin-top:6px">${escapeHtml(partAdvice(k,v))}</div>
+        <div style="height:8px"></div>
+      `;
+    }).join("");
+
+    $("partsBox").innerHTML = `<b style="font-size:13px">تفصيل الأجزاء:</b><div style="margin-top:8px">${partsHtml}</div>`;
+
+    return {parts, total, season, step: customStep || c.step};
+  }
+
+  // storage
+  const KEY = "weekly_review_q_v1";
+  function loadHistory(){ try{ return JSON.parse(localStorage.getItem(KEY) || "[]"); }catch{ return []; } }
+  function saveHistory(items){ localStorage.setItem(KEY, JSON.stringify(items)); }
+  function addEntry(entry){
+    const h = loadHistory(); h.unshift(entry);
+    saveHistory(h.slice(0,26));
+  }
+
+  function renderHistory(){
+    const h = loadHistory();
+    if(!h.length){
+      $("historyWrap").innerHTML = `<div class="tiny">لا يوجد بيانات محفوظة بعد.</div>`;
+      return;
+    }
+    const rows = h.slice(0,8).map(e=>{
+      const pct = clamp((e.total/75)*100,0,100);
+      return `
+        <tr>
+          <td class="tiny">${escapeHtml(e.week)}</td>
+          <td class="tiny">${escapeHtml(e.season)}</td>
+          <td class="tiny">${e.total}/75</td>
+          <td style="min-width:140px"><div class="bar"><i style="width:${pct}%"></i></div></td>
+        </tr>
+      `;
+    }).join("");
+    $("historyWrap").innerHTML = `
+      <table>
+        <thead><tr><th>الأسبوع</th><th>الموسم</th><th>المجموع</th><th>تقدّم</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="tiny">* التاريخ ده على نفس الجهاز اللي اتحفظت عليه المراجعات.</div>
+    `;
+  }
+
+  function exportCSV(){
+    const h = loadHistory();
+    if(!h.length){ alert("مفيش بيانات للتصدير."); return; }
+    const header = ["week","name","total","season","spirit","work","study","rel","serv","step","createdAt"];
+    const lines = [header.join(",")].concat(
+      h.map(e => header.map(k => `"${String(e[k] ?? "").replace(/"/g,'""')}"`).join(","))
+    );
+    const blob = new Blob([lines.join("\n")], {type:"text/csv;charset=utf-8"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "weekly_review.csv";
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  }
+
+  function clearAll(){
+    if(!confirm("متأكد تمسح كل المراجعات المحفوظة على الجهاز؟")) return;
+    localStorage.removeItem(KEY);
+    renderHistory();
+    alert("تم المسح.");
+  }
+
+  // init
+  $("weekPill").textContent = `الأسبوع: ${isoWeekString()}`;
+  renderSections();
+  bindAllSliders();
+  renderHistory();
+
+  $("calcBtn").addEventListener("click", renderResult);
+  $("saveBtn").addEventListener("click", ()=>{
+    const r = renderResult();
+    const entry = {
+      week: isoWeekString(),
+      name: ($("name").value || "").trim(),
+      total: r.total,
+      season: r.season,
+      ...r.parts,
+      step: r.step,
+      createdAt: new Date().toISOString()
+    };
+    addEntry(entry);
+    renderHistory();
+    alert("اتحفظت ✅");
+  });
+  $("exportBtn").addEventListener("click", exportCSV);
+  $("clearBtn").addEventListener("click", clearAll);
+</script>
+</body>
+</html>
