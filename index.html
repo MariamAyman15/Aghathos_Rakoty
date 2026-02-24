@@ -457,7 +457,7 @@
   function showIntro(choiceText, stepText){
     $("introResult").style.display = "block";
     $("introText").innerHTML = `<b>إجابتك:</b> ${escapeHtml(choiceText)}`;
-    $("introStep").innerHTML = `<b>اقتراح عملي (دقيقة واحدة):</b> ${escapeHtml(stepText)}`;
+    $("introStep").innerHTML = `<b>اقتراح عملي:</b> ${escapeHtml(stepText)}`;
   }
 
   function introChoice(opt){
@@ -585,3 +585,4 @@
 </script>
 </body>
 </html>
+
