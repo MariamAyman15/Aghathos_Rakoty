@@ -12,44 +12,25 @@
       font-family: system-ui, -apple-system, "Segoe UI", Tahoma, Arial;
     }
     @media (prefers-color-scheme: light) {
-    :root{
-      --bg:#f7f9fc;
-      --card:#ffffff;
-      --text:#0f172a;
-      --muted:#475569;
-      --border:rgba(0,0,0,.08);
-    }
-  
-    body{
-      background:linear-gradient(180deg,#eef2f7,#f7f9fc);
+      :root{
+        --bg:#f7f9fc;
+        --card:#ffffff;
+        --text:#0f172a;
+        --muted:#475569;
+        --border:rgba(0,0,0,.08);
+      }
+      body{ background:linear-gradient(180deg,#eef2f7,#f7f9fc); }
+      .sub{ color:#334155; }
+      .qText{ color:#0f172a; }
+      .verse{ color:#0f172a; }
+      .badge{ background:rgba(0,0,0,.05); color:#0f172a; }
+      input[type="text"]{ background:#ffffff; color:#0f172a; }
+      .section{ background:rgba(255,255,255,.6); }
+      .card{ box-shadow:0 6px 18px rgba(0,0,0,.08); }
+      .bar{ background:rgba(0,0,0,.08); }
+      .collapseBtn{ background:rgba(0,0,0,.06); }
     }
 
-    .sub{ color:#334155; }
-    .qText{ color:#0f172a; }
-    .verse{ color:#0f172a; }
-  
-    .badge{
-      background:rgba(0,0,0,.05);
-      color:#0f172a;
-    }
-  
-    input[type="text"]{
-      background:#ffffff;
-      color:#0f172a;
-    }
-  
-    .section{
-      background:rgba(255,255,255,.6);
-    }
-  
-    .card{
-      box-shadow:0 6px 18px rgba(0,0,0,.08);
-    }
-  
-    .bar{
-      background:rgba(0,0,0,.08);
-    }
-  }
     body{margin:0;background:linear-gradient(180deg,#070b14, #0b1220);color:var(--text);}
     .wrap{max-width:1120px;margin:0 auto;padding:18px;}
     .hero{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;}
@@ -63,7 +44,7 @@
     label{display:block;font-size:14px;margin:10px 0 6px;color:#dbe7ff}
     input[type="text"]{width:100%;background:#0a1020;border:1px solid var(--border);color:var(--text);padding:10px 12px;border-radius:12px;font-size:14px;outline:none}
     .section{border:1px solid var(--border);border-radius:16px;padding:12px;margin:10px 0;background:rgba(10,16,32,.55)}
-    .secTitle{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:6px}
+    .secTitle{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}
     .secTitle b{font-size:14px}
     .secHint{color:var(--muted);font-size:12px}
     .q{border-top:1px dashed rgba(255,255,255,.12);padding-top:10px;margin-top:10px}
@@ -95,6 +76,7 @@
     .kpi{display:flex;justify-content:space-between;gap:10px;align-items:center;margin:10px 0}
     .kpi b{font-size:13px}
     .badge{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--border);padding:6px 10px;border-radius:999px;font-size:12px;color:#dbe7ff;background:rgba(255,255,255,.04)}
+
     .modalOverlay{
       position:fixed; inset:0; background:rgba(0,0,0,.65);
       display:flex; align-items:center; justify-content:center;
@@ -119,6 +101,33 @@
     }
     .optBtn small{display:block;margin-top:6px;color:var(--muted);font-weight:650;line-height:1.6}
     .modalFooter{display:flex;gap:10px;flex-wrap:wrap;justify-content:space-between;align-items:center;margin-top:12px}
+
+    /* NEW: work/study selector */
+    .radioRow{
+      display:flex; gap:10px; flex-wrap:wrap;
+      border:1px solid var(--border);
+      padding:10px 12px; border-radius:14px;
+      background:rgba(10,16,32,.35);
+      margin-top:8px;
+    }
+    .radioRow label{
+      margin:0; display:flex; align-items:center; gap:8px;
+      cursor:pointer; color:var(--text); font-weight:850;
+    }
+    .radioRow input{ accent-color: #38bdf8; }
+
+    /* NEW: collapsible sections */
+    .collapseBtn{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid var(--border);
+      background:rgba(255,255,255,.04);
+      padding:8px 10px; border-radius:12px;
+      font-weight:950; cursor:pointer;
+      white-space:nowrap;
+    }
+    .collapseIcon{ width:18px; display:inline-block; text-align:center; }
+    .secBody{ display:block; }
+    .section.collapsed .secBody{ display:none; }
   </style>
 </head>
 <body>
@@ -149,6 +158,17 @@
         <label>خطوة واحدة هعملها خلال الاسبوع دا (اختياري)</label>
         <input id="stepInput" type="text" placeholder="مثال: هصلي 5 دقايق يوميًا + هبطل مقارنة نفسي" />
 
+        <!-- NEW: selector -->
+        <label>العمل / الدراسة (اختيار واحد)</label>
+        <div class="radioRow" id="modeRow">
+          <label><input type="radio" name="mode" value="work" /> شغل</label>
+          <label><input type="radio" name="mode" value="both" /> شغل دراسة</label>
+          <label><input type="radio" name="mode" value="study" /> دراسة</label>
+        </div>
+        <div class="tiny" style="margin-top:6px">
+          اختيارك ده بيحدد الأجزاء اللي هتظهر والـ Max في النتيجة.
+        </div>
+
         <div id="sections"></div>
 
         <div class="btns">
@@ -173,7 +193,7 @@
               <span class="dot" id="seasonDot"></span>
               <span id="seasonText">اضغط "اظهر النتيجة"</span>
             </div>
-            <div class="tiny">النتيجة العامة: <b id="totalText">-</b>/150</div>
+            <div class="tiny">النتيجة العامة: <b id="totalText">-</b></div>
           </div>
 
           <div class="bar" style="margin-top:10px"><i id="totalBar"></i></div>
@@ -250,17 +270,44 @@
     return `${date.getUTCFullYear()}-W${String(weekNo).padStart(2,'0')}`;
   }
   function clamp(n,min,max){ return Math.max(min, Math.min(max,n)); }
-  function pctFromTotal(total){ return clamp((total/150)*100,0,100); }
+  function pct(total, max){ return max ? clamp((total/max)*100,0,100) : 0; }
   function escapeHtml(str){
     return String(str).replace(/[&<>"']/g, (m)=>({
       "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
     }[m]));
   }
 
-  // 5 parts × 6 questions = 30 questions total
-  // Each question: 0..5
-  // Each part: 0..30
-  // Total: 0..150
+  // -----------------------------
+  // NEW: mode (work/study/both)
+  // -----------------------------
+  const MODE_KEY = "ayyam_mode_v1";
+  function getMode(){
+    return localStorage.getItem(MODE_KEY) || "both";
+  }
+  function setMode(m){
+    localStorage.setItem(MODE_KEY, m);
+  }
+  function applyModeToRadios(){
+    const m = getMode();
+    document.querySelectorAll('input[name="mode"]').forEach(r=>{
+      r.checked = (r.value === m);
+    });
+  }
+  function activeKeys(){
+    // Always: spirit + rel + serv
+    const m = getMode();
+    const base = ["spirit", "rel", "serv"];
+    if (m === "work") return [...base, "work"];
+    if (m === "study") return [...base, "study"];
+    return [...base, "work", "study"]; // both
+  }
+  function maxTotal(){
+    return activeKeys().length * 30;
+  }
+
+  // -----------------------------
+  // Blueprint
+  // -----------------------------
   const blueprint = [
     {
       key:"spirit",
@@ -329,38 +376,90 @@
     }
   ];
 
+  // -----------------------------
+  // NEW: collapsible + mode-aware rendering
+  // -----------------------------
+  const COLLAPSE_KEY = "ayyam_collapsed_v1";
+  function loadCollapsedMap(){
+    try{ return JSON.parse(localStorage.getItem(COLLAPSE_KEY) || "{}"); }catch{ return {}; }
+  }
+  function saveCollapsedMap(map){
+    localStorage.setItem(COLLAPSE_KEY, JSON.stringify(map));
+  }
+
   function renderSections(){
     const root = $("sections");
-    root.innerHTML = blueprint.map(sec=>{
-      const qsHtml = sec.qs.map((t,idx)=>{
-        const id = `${sec.key}_${idx+1}`;
+    const active = new Set(activeKeys());
+    const collapsedMap = loadCollapsedMap();
+
+    root.innerHTML = blueprint
+      .filter(sec => active.has(sec.key))
+      .map(sec=>{
+        const isCollapsed = !!collapsedMap[sec.key];
+
+        const qsHtml = sec.qs.map((t,idx)=>{
+          const id = `${sec.key}_${idx+1}`;
+          return `
+            <div class="q">
+              <div class="qText">${t}</div>
+              <div class="qRow">
+                <input id="${id}" type="range" min="0" max="5" value="0" />
+                <div class="val"><span id="v_${id}">0</span>/5</div>
+              </div>
+            </div>
+          `;
+        }).join("");
+
         return `
-          <div class="q">
-            <div class="qText">${t}</div>
-            <div class="qRow">
-              <input id="${id}" type="range" min="0" max="5" value="0" />
-              <div class="val"><span id="v_${id}">0</span>/5</div>
+          <div class="section ${isCollapsed ? "collapsed" : ""}" data-sec="${sec.key}">
+            <div class="secTitle">
+              <div>
+                <b>${sec.title}</b>
+                <div class="secHint">${sec.hint}</div>
+              </div>
+              <button type="button" class="collapseBtn" data-toggle="${sec.key}">
+                <span class="collapseIcon">${isCollapsed ? "＋" : "−"}</span>
+                <span>${isCollapsed ? "فتح" : "قفل"}</span>
+              </button>
+            </div>
+            <div class="secBody">
+              ${qsHtml}
             </div>
           </div>
         `;
       }).join("");
-      return `
-        <div class="section">
-          <div class="secTitle">
-            <b>${sec.title}</b>
-            <span class="secHint">${sec.hint}</span>
-          </div>
-          ${qsHtml}
-        </div>
-      `;
-    }).join("");
+
+    // bind collapse buttons
+    root.querySelectorAll("[data-toggle]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        const key = btn.dataset.toggle;
+        const box = root.querySelector(`.section[data-sec="${key}"]`);
+        if(!box) return;
+
+        box.classList.toggle("collapsed");
+        const nowCollapsed = box.classList.contains("collapsed");
+
+        // update icon/text
+        const icon = btn.querySelector(".collapseIcon");
+        const txt = btn.querySelector("span:last-child");
+        if(icon) icon.textContent = nowCollapsed ? "＋" : "−";
+        if(txt) txt.textContent = nowCollapsed ? "فتح" : "قفل";
+
+        const map = loadCollapsedMap();
+        map[key] = nowCollapsed;
+        saveCollapsedMap(map);
+      });
+    });
   }
 
   function bindAllSliders(){
-    blueprint.forEach(sec=>{
+    // bind only active sliders
+    const active = new Set(activeKeys());
+    blueprint.filter(sec=>active.has(sec.key)).forEach(sec=>{
       sec.qs.forEach((_,idx)=>{
         const id = `${sec.key}_${idx+1}`;
         const s = $(id), o = $(`v_${id}`);
+        if(!s || !o) return;
         const sync = ()=> o.textContent = s.value;
         s.addEventListener("input", sync);
         sync();
@@ -369,26 +468,27 @@
   }
 
   function getScores(){
+    const active = new Set(activeKeys());
     const parts = {};
-    blueprint.forEach(sec=>{
-      let sum = 0; // 0..30
+    blueprint.filter(sec=>active.has(sec.key)).forEach(sec=>{
+      let sum = 0;
       sec.qs.forEach((_,idx)=>{
-        sum += +$(`${sec.key}_${idx+1}`).value; // 0..5
+        sum += +$(`${sec.key}_${idx+1}`).value;
       });
       parts[sec.key] = sum; // 0..30
     });
-    const total = Object.values(parts).reduce((a,b)=>a+b,0); // 0..150
-    return {parts, total};
+    const total = Object.values(parts).reduce((a,b)=>a+b,0);
+    return {parts, total, max: maxTotal()};
   }
 
-  // Hope-focused "seasons" (not comparing parts)
-  function hopeSeason(total, parts){
-    // gentle guardrail: very low spiritual score increases "need for restart" message
-    const spirit = parts.spirit; // 0..30
+  // Hope-focused seasons (mode-aware max)
+  function hopeSeason(total, parts, max){
+    const spirit = parts.spirit ?? 0; // 0..30
+    const totalPct = max ? (total/max) : 0;
 
-    if (spirit <= 6 || total <= 40) return "بداية رجاء";
-    if (total <= 85) return "رجاء يتثبت";
-    if (total <= 120) return "رجاء يتحرك";
+    if (spirit <= 6 || totalPct <= 0.28) return "بداية رجاء";
+    if (totalPct <= 0.58) return "رجاء يتثبت";
+    if (totalPct <= 0.82) return "رجاء يتحرك";
     return "رجاء يقود";
   }
 
@@ -400,7 +500,7 @@
           title: "بداية رجاء (مفيش حكم عليك)",
           verse: "حتى لو الأيام كانت صعبة… الرب يقدر يبدأ معاك من جديد. خطوة صغيرة صادقة أفضل من انتظار طويل.",
           ref: "لا تقف عند الألم… تحرك للأمام.",
-          step: "خطوة واحدة للأسبوع: 5 دقايق صلاة يوميًا + قرار عملي واحد بسيط (تنظيم/مصالحة/تواصل/مذاكرة).",
+          step: "خطوة واحدة للأسبوع: 5 دقايق صلاة يوميًا + قرار عملي واحد بسيط (تنظيم/مصالحة/تواصل/مذاكرة/شغل).",
           prayer: "يا رب يسوع، أنا جاي لك زي ما أنا، بفتوري وضعفي وعدم ثباتي.\nحط في قلبي رجاء جديد، وادّيني نعمة أبدأ خطوة صغيرة معاك من النهارده."
         };
       case "رجاء يتثبت":
@@ -409,7 +509,7 @@
           title: "رجاء يتثبت",
           verse: "فيه رجاء… وده محتاج تثبيت عادة واحدة بدل التشتت. مش لازم كل حاجة تتغير مرة واحدة.",
           ref: "لا تيأس من المستقبل — الرب مازال يعمل.",
-          step: "خطوة واحدة للأسبوع: عادة واحدة ثابتة 7 أيام (صلاة/كلمة/نظام نوم/مذاكرة) + شخص تتابع معاه.",
+          step: "خطوة واحدة للأسبوع: عادة واحدة ثابتة 7 أيام (صلاة/كلمة/نظام نوم/مذاكرة/ترتيب شغل) + شخص تتابع معاه.",
           prayer: "يا رب، شكراً إن في نور ولو صغير في حياتي.\nثبّتني في الطريق الصح، وخليني ما أرجعش تاني للكسل أو المقارنة."
         };
       case "رجاء يتحرك":
@@ -443,9 +543,7 @@
     })[key] || key;
   }
 
-  // Gentle, non-comparative encouragement per part
   function partEncourage(key, score){
-    // score 0..30
     if (score <= 10){
       switch(key){
         case "spirit": return "رسالة رجاء ليك: ابدأ من جديد بدون ضغط… 5 دقايق يوميًا تكفي كبداية.";
@@ -462,15 +560,16 @@
   }
 
   function renderResult(){
-    const {parts, total} = getScores();
-    const season = hopeSeason(total, parts);
+    const {parts, total, max} = getScores();
+    const season = hopeSeason(total, parts, max);
     const c = seasonContent(season);
     window.__currentPrayer = c.prayer || "";
+
     $("seasonText").textContent = `${c.title}`;
     $("seasonDot").style.background = c.color;
 
-    $("totalText").textContent = total;
-    $("totalBar").style.width = `${pctFromTotal(total)}%`;
+    $("totalText").textContent = `${total}/${max}`;
+    $("totalBar").style.width = `${pct(total, max)}%`;
 
     $("verse").innerHTML = `<b>${escapeHtml(c.verse)}</b>`;
     $("verseRef").textContent = c.ref;
@@ -480,23 +579,31 @@
       ? `<b>خطوتي المكتوبة:</b> ${escapeHtml(customStep)}`
       : `<b>اقتراح عملي:</b> ${escapeHtml(c.step)}`;
 
-    // show parts as supportive indicators (no ranking)
+    // only selected parts
     const partsHtml = Object.entries(parts).map(([k,v])=>{
-      const pct = clamp((v/30)*100,0,100);
+      const partMax = 30;
+      const partPct = pct(v, partMax);
       return `
         <div class="kpi">
           <b>${partLabel(k)}</b>
-          <span class="tiny"><b>${v}</b>/30</span>
+          <span class="tiny"><b>${v}</b>/${partMax}</span>
         </div>
-        <div class="bar"><i style="width:${pct}%"></i></div>
+        <div class="bar"><i style="width:${partPct}%"></i></div>
         <div class="tiny" style="margin-top:6px">${escapeHtml(partEncourage(k,v))}</div>
         <div style="height:10px"></div>
       `;
     }).join("");
 
-    $("partsBox").innerHTML = `<b style="font-size:13px">مؤشرات تشجيعية (بدون مقارنة):</b><div style="margin-top:8px">${partsHtml}</div>`;
+    $("partsBox").innerHTML =
+      `<b style="font-size:13px">مؤشرات تشجيعية (حسب اختيارك):</b>
+       <div class="tiny" style="margin-top:6px">وضعك: <b>${modeLabel(getMode())}</b></div>
+       <div style="margin-top:8px">${partsHtml}</div>`;
 
-    return {parts, total, season, step: customStep || c.step};
+    return {parts, total, season, step: customStep || c.step, max, mode: getMode()};
+  }
+
+  function modeLabel(m){
+    return ({work:"يعمل", both:"يعمل ويدرس", study:"يدرس"})[m] || m;
   }
 
   // Intro modal logic
@@ -505,7 +612,6 @@
     $("introText").innerHTML = `<b>إجابتك:</b> ${escapeHtml(choiceText)}`;
     $("introStep").innerHTML = `<b>اقتراح عملي:</b> ${escapeHtml(stepText)}`;
   }
-
   function introChoice(opt){
     if (opt === "babil"){
       showIntro(
@@ -531,7 +637,7 @@
   }
 
   // Weekly history
-  const KEY = "ayyam_weekly_history_v2";
+  const KEY = "ayyam_weekly_history_v3"; // bumped version
   function loadHistory(){ try{ return JSON.parse(localStorage.getItem(KEY) || "[]"); }catch{ return []; } }
   function saveHistory(items){ localStorage.setItem(KEY, JSON.stringify(items)); }
   function addEntry(entry){
@@ -546,15 +652,16 @@
       return;
     }
     const rows = h.slice(0,8).map(e=>{
-      const pct = clamp((e.total/150)*100,0,100);
+      const p = pct(e.total, e.max || 150);
       return `
         <div class="resultBox" style="margin-bottom:10px">
           <div class="row">
             <div class="tiny"><b>${escapeHtml(e.week)}</b></div>
             <div class="tiny">${escapeHtml(e.season)}</div>
-            <div class="tiny"><b>${e.total}</b>/150</div>
+            <div class="tiny"><b>${e.total}</b>/${e.max || 150}</div>
           </div>
-          <div class="bar" style="margin-top:10px"><i style="width:${pct}%"></i></div>
+          <div class="tiny" style="margin-top:6px">وضعك: <b>${escapeHtml(e.modeLabel || "")}</b></div>
+          <div class="bar" style="margin-top:10px"><i style="width:${p}%"></i></div>
           ${e.step ? `<div class="tiny" style="margin-top:10px"><b>خطوتي:</b> ${escapeHtml(e.step)}</div>` : ``}
         </div>
       `;
@@ -565,10 +672,13 @@
   function exportCSV(){
     const h = loadHistory();
     if(!h.length){ alert("مفيش بيانات للتصدير."); return; }
-    const header = ["week","name","total","season","spirit","work","study","rel","serv","step","createdAt"];
+
+    // Keep flexible columns for parts (since mode changes)
+    const header = ["week","name","mode","modeLabel","total","max","season","spirit","work","study","rel","serv","step","createdAt"];
     const lines = [header.join(",")].concat(
       h.map(e => header.map(k => `"${String(e[k] ?? "").replace(/"/g,'""')}"`).join(","))
     );
+
     const blob = new Blob([lines.join("\n")], {type:"text/csv;charset=utf-8"});
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -584,31 +694,60 @@
     alert("تم المسح.");
   }
 
-  // init
+  // -----------------------------
+  // Init + events
+  // -----------------------------
   $("weekPill").textContent = `الأسبوع: ${isoWeekString()}`;
+
+  // init mode UI
+  applyModeToRadios();
+  document.querySelectorAll('input[name="mode"]').forEach(r=>{
+    r.addEventListener("change", ()=>{
+      setMode(r.value);
+      // rerender sections based on selection
+      renderSections();
+      bindAllSliders();
+      // reset result area text slightly (optional)
+      $("seasonText").textContent = `تم تحديث الاختيار: ${modeLabel(getMode())}`;
+      $("totalText").textContent = "-";
+      $("totalBar").style.width = "0%";
+      $("partsBox").innerHTML = "";
+    });
+  });
+
   renderSections();
   bindAllSliders();
   renderHistory();
 
   $("calcBtn").addEventListener("click", renderResult);
+
   $("prayBtn").addEventListener("click", ()=>{
-  const text = (window.__currentPrayer || "").trim();
-  if(!text){
-    alert("اعمل 'اظهر النتيجة' الأول 🙏");
-    return;
-  }
-  const box = $("prayerBox");
-  box.style.display = "block";
-  box.innerHTML = `<div class="verse"><b>صلاة قصيرة للرجاء:</b><br>${escapeHtml(text).replace(/\n/g,"<br>")}</div>`;
+    const text = (window.__currentPrayer || "").trim();
+    if(!text){
+      alert("دوس على 'اظهر النتيجة' الأول 🙏");
+      return;
+    }
+    const box = $("prayerBox");
+    box.style.display = "block";
+    box.innerHTML = `<div class="verse"><b>صلاة قصيرة للرجاء:</b><br>${escapeHtml(text).replace(/\n/g,"<br>")}</div>`;
   });
+
   $("saveBtn").addEventListener("click", ()=>{
     const r = renderResult();
     const entry = {
       week: isoWeekString(),
       name: ($("name").value || "").trim(),
+      mode: r.mode,
+      modeLabel: modeLabel(r.mode),
       total: r.total,
+      max: r.max,
       season: r.season,
-      ...r.parts,
+      // store all parts (some may be undefined -> keep empty)
+      spirit: r.parts.spirit ?? "",
+      work: r.parts.work ?? "",
+      study: r.parts.study ?? "",
+      rel: r.parts.rel ?? "",
+      serv: r.parts.serv ?? "",
       step: r.step,
       createdAt: new Date().toISOString()
     };
@@ -632,20 +771,8 @@
     btn.addEventListener("click", ()=> introChoice(btn.dataset.opt));
   });
 
-  // open intro on first visit
-  /*const seen = localStorage.getItem("ayyam_seen_intro_v2");
-  if(!seen){
-    $("introOverlay").style.display = "flex";
-    localStorage.setItem("ayyam_seen_intro_v2","1");
-  }*/
+  // open intro on first visit (kept as you had it)
   $("introOverlay").style.display = "flex";
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
