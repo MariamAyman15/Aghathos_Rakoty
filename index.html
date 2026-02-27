@@ -311,7 +311,7 @@
   const blueprint = [
     {
       key:"spirit",
-      title:"1- الحياة الروحية",
+      title:"الحياة الروحية",
       hint:"هل في فتور؟ هل حاسس بحضور الله في يومك؟ هل في رجاء للغد؟",
       qs:[
         "حتى لو بمر بفترات فتور، عندي رغبة حقيقية أرجع وأنمو.",
@@ -324,7 +324,7 @@
     },
     {
       key:"work",
-      title:"2- العمل",
+      title:"العمل",
       hint:"هل أنا في المكان المناسب؟ هل بتقدم؟ ماذا أتوقع للغد؟",
       qs:[
         "أنا في وظيفة/مسار مهني مناسب لظروفي حاليًا.",
@@ -337,7 +337,7 @@
     },
     {
       key:"study",
-      title:"3- الدراسة",
+      title:"الدراسة",
       hint:"ماذا عن الماضي؟ ماذا عن الآن؟ كيف أرى غدًا؟",
       qs:[
         "عندي اتزان وإلتزام تجاه الدراسة/التعلم.",
@@ -350,7 +350,7 @@
     },
     {
       key:"rel",
-      title:"4- العلاقات / الصداقة",
+      title:"العلاقات / الصداقة",
       hint:"هل عندي شخص آمن؟ هل علاقاتي صحية؟ هل في سلام؟",
       qs:[
         "عندي صديق/ة أمين أقدر أتكلم معاه/معاها بصدق.",
@@ -363,7 +363,7 @@
     },
     {
       key:"serv",
-      title:"5- الخدمة",
+      title:"الخدمة",
       hint:"هل في فتور؟ هل في نمو داخلي؟ ما الخطوة القادمة؟",
       qs:[
         "عندي رغبة صادقة وأحلام مستمرة للخدمة.",
@@ -392,65 +392,64 @@
     const active = new Set(activeKeys());
     const collapsedMap = loadCollapsedMap();
 
-    root.innerHTML = blueprint
-      .filter(sec => active.has(sec.key))
-      .map(sec=>{
-        const isCollapsed = !!collapsedMap[sec.key];
+   const visible = blueprint.filter(sec => active.has(sec.key)); // بالترتيب
+  root.innerHTML = visible.map((sec, i)=>{
+    const isCollapsed = !!collapsedMap[sec.key];
+    const number = i + 1; // ✅ هنا الترقيم الديناميكي
 
-        const qsHtml = sec.qs.map((t,idx)=>{
-          const id = `${sec.key}_${idx+1}`;
-          return `
-            <div class="q">
-              <div class="qText">${t}</div>
-              <div class="qRow">
-                <input id="${id}" type="range" min="0" max="5" value="0" />
-                <div class="val"><span id="v_${id}">0</span>/5</div>
-              </div>
-            </div>
-          `;
-        }).join("");
-
-        return `
-          <div class="section ${isCollapsed ? "collapsed" : ""}" data-sec="${sec.key}">
-            <div class="secTitle">
-              <div>
-                <b>${sec.title}</b>
-                <div class="secHint">${sec.hint}</div>
-              </div>
-              <button type="button" class="collapseBtn" data-toggle="${sec.key}">
-                <span class="collapseIcon">${isCollapsed ? "＋" : "−"}</span>
-                <span>${isCollapsed ? "فتح" : "قفل"}</span>
-              </button>
-            </div>
-            <div class="secBody">
-              ${qsHtml}
-            </div>
+    const qsHtml = sec.qs.map((t,idx)=>{
+      const id = `${sec.key}_${idx+1}`;
+      return `
+        <div class="q">
+          <div class="qText">${t}</div>
+          <div class="qRow">
+            <input id="${id}" type="range" min="0" max="5" value="0" />
+            <div class="val"><span id="v_${id}">0</span>/5</div>
           </div>
-        `;
-      }).join("");
+        </div>
+      `;
+    }).join("");
 
-    // bind collapse buttons
-    root.querySelectorAll("[data-toggle]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const key = btn.dataset.toggle;
-        const box = root.querySelector(`.section[data-sec="${key}"]`);
-        if(!box) return;
+    return `
+      <div class="section ${isCollapsed ? "collapsed" : ""}" data-sec="${sec.key}">
+        <div class="secTitle">
+          <div>
+            <b>${number}- ${sec.title}</b>
+            <div class="secHint">${sec.hint}</div>
+          </div>
+          <button type="button" class="collapseBtn" data-toggle="${sec.key}">
+            <span class="collapseIcon">${isCollapsed ? "＋" : "−"}</span>
+            <span>${isCollapsed ? "فتح" : "قفل"}</span>
+          </button>
+        </div>
+        <div class="secBody">
+          ${qsHtml}
+        </div>
+      </div>
+    `;
+  }).join("");
 
-        box.classList.toggle("collapsed");
-        const nowCollapsed = box.classList.contains("collapsed");
+  // bind collapse buttons (زي ما هو)
+  root.querySelectorAll("[data-toggle]").forEach(btn=>{
+    btn.addEventListener("click", ()=>{
+      const key = btn.dataset.toggle;
+      const box = root.querySelector(`.section[data-sec="${key}"]`);
+      if(!box) return;
 
-        // update icon/text
-        const icon = btn.querySelector(".collapseIcon");
-        const txt = btn.querySelector("span:last-child");
-        if(icon) icon.textContent = nowCollapsed ? "＋" : "−";
-        if(txt) txt.textContent = nowCollapsed ? "فتح" : "قفل";
+      box.classList.toggle("collapsed");
+      const nowCollapsed = box.classList.contains("collapsed");
 
-        const map = loadCollapsedMap();
-        map[key] = nowCollapsed;
-        saveCollapsedMap(map);
-      });
+      const icon = btn.querySelector(".collapseIcon");
+      const txt = btn.querySelector("span:last-child");
+      if(icon) icon.textContent = nowCollapsed ? "＋" : "−";
+      if(txt) txt.textContent = nowCollapsed ? "فتح" : "قفل";
+
+      const map = loadCollapsedMap();
+      map[key] = nowCollapsed;
+      saveCollapsedMap(map);
     });
-  }
+  });
+}
 
   function bindAllSliders(){
     // bind only active sliders
@@ -776,5 +775,6 @@
 </script>
 </body>
 </html>
+
 
 
